@@ -25,3 +25,6 @@ dist-ssr
 
 #files
 5. Digital Complaint Management & Grievance Portal.docx
+.env
+backend/.env
+*.env
