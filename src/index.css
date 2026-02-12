@@ -1,0 +1,16 @@
+html {
+  scroll-behavior: smooth;
+}
+
+@import "tailwindcss";
+
+:root {
+  font-family: 'Outfit', system-ui, sans-serif;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #fcfcfc;
+}
