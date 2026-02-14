@@ -1,6 +1,8 @@
 const Complaint = require('../models/Complaint');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
+const Settings = require('../models/Settings');
+const Message = require('../models/Message');
 
 // @desc    Create new complaint
 // @route   POST /api/complaints
@@ -9,13 +11,64 @@ exports.createComplaint = async (req, res) => {
     try {
         req.body.user = req.user.id;
 
+        // Check if auto-assignment is enabled globally
+        let settings = await Settings.findOne();
+        if (!settings) settings = await Settings.create({});
+
+        if (settings.isAutoAssignEnabled) {
+            // Auto-assignment logic based on Category/Skill
+            const category = req.body.category;
+
+            // Try matching skill first, fallback to all staff
+            let staff = await User.find({ role: 'Staff', skills: category });
+            if (staff.length === 0) {
+                staff = await User.find({ role: 'Staff' });
+            }
+
+            if (staff.length > 0) {
+                // Find staff member with least active complaints among candidates
+                const staffList = await Promise.all(staff.map(async (member) => {
+                    const count = await Complaint.countDocuments({
+                        assignedTo: member._id,
+                        status: { $in: ['Assigned', 'In-Progress'] }
+                    });
+                    return { member, count };
+                }));
+
+                // Sort by count ascending
+                staffList.sort((a, b) => a.count - b.count);
+
+                // Assign to the most available candidate
+                req.body.assignedTo = staffList[0].member._id;
+                req.body.status = 'Assigned';
+            }
+        }
+
         const complaint = await Complaint.create(req.body);
+
+        // If assigned, create notification for staff and user
+        if (complaint.assignedTo) {
+            await Notification.create({
+                user: complaint.assignedTo,
+                message: `New complaint auto-assigned: "${complaint.title}"`,
+                complaint: complaint._id,
+                type: 'Assignment'
+            });
+
+            await Notification.create({
+                user: complaint.user,
+                message: `Your complaint "${complaint.title}" has been assigned to a staff member for resolution.`,
+                complaint: complaint._id,
+                type: 'Assignment'
+            });
+        }
 
         res.status(201).json({
             success: true,
             data: complaint
         });
     } catch (err) {
+        console.error('Error in createComplaint:', err);
         res.status(400).json({ success: false, message: err.message });
     }
 };
@@ -237,9 +290,156 @@ exports.getAnalytics = async (req, res) => {
     }
 };
 
-// @desc    Get public stats for home page
-// @route   GET /api/complaints/public/stats
-// @access  Public
+// Internal helper for auto-assignment
+const runAutoAssignmentInternal = async () => {
+    try {
+        const settings = await Settings.findOne();
+        if (!settings || !settings.isAutoAssignEnabled) return 0;
+
+        const openComplaints = await Complaint.find({ status: 'Open' });
+        if (openComplaints.length === 0) return 0;
+
+        const staff = await User.find({ role: 'Staff' });
+        if (staff.length === 0) return 0;
+
+        let assignedCount = 0;
+        for (const complaint of openComplaints) {
+            let potentialStaff = await User.find({ role: 'Staff', skills: complaint.category });
+            if (potentialStaff.length === 0) potentialStaff = staff;
+
+            const staffList = await Promise.all(potentialStaff.map(async (member) => {
+                const count = await Complaint.countDocuments({
+                    assignedTo: member._id,
+                    status: { $in: ['Assigned', 'In-Progress'] }
+                });
+                return { member, count };
+            }));
+
+            staffList.sort((a, b) => a.count - b.count);
+            const bestStaff = staffList[0].member;
+
+            complaint.assignedTo = bestStaff._id;
+            complaint.status = 'Assigned';
+            await complaint.save();
+
+            await Notification.create({
+                user: bestStaff._id,
+                message: `Complaint auto-assigned: "${complaint.title}"`,
+                complaint: complaint._id,
+                type: 'Assignment'
+            });
+
+            await Notification.create({
+                user: complaint.user,
+                message: `Your complaint "${complaint.title}" has been auto-assigned to ${bestStaff.name} for resolution.`,
+                complaint: complaint._id,
+                type: 'Assignment'
+            });
+
+            assignedCount++;
+        }
+        return assignedCount;
+    } catch (err) {
+        console.error('Error in runAutoAssignmentInternal:', err);
+        return 0;
+    }
+};
+
+exports.runAutoAssignmentInternal = runAutoAssignmentInternal;
+
+// Internal helper for SLA Escalation
+const runSLAEscalationInternal = async () => {
+    try {
+        const overdueComplaints = await Complaint.find({
+            status: { $nin: ['Resolved', 'Closed'] },
+            sla_deadline: { $lt: new Date() },
+            isEscalated: false
+        });
+
+        if (overdueComplaints.length === 0) return 0;
+
+        const admins = await User.find({ role: 'Admin' });
+
+        let escalatedCount = 0;
+        for (const complaint of overdueComplaints) {
+            complaint.isEscalated = true;
+            complaint.priority = 'Urgent';
+            await complaint.save();
+
+            // Notify Admins
+            for (const admin of admins) {
+                await Notification.create({
+                    user: admin._id,
+                    message: `SLA BREACH: Complaint "${complaint.title}" (${complaint.complaint_unique_id}) has exceeded its deadline!`,
+                    complaint: complaint._id,
+                    type: 'Escalation'
+                });
+            }
+
+            // Notify Assigned Staff
+            if (complaint.assignedTo) {
+                await Notification.create({
+                    user: complaint.assignedTo,
+                    message: `URGENT: Complaint "${complaint.title}" assigned to you has breached SLA!`,
+                    complaint: complaint._id,
+                    type: 'Escalation'
+                });
+            }
+
+            escalatedCount++;
+        }
+        return escalatedCount;
+    } catch (err) {
+        console.error('Error in runSLAEscalationInternal:', err);
+        return 0;
+    }
+};
+
+exports.runSLAEscalationInternal = runSLAEscalationInternal;
+
+// @desc    Get system settings
+// @route   GET /api/complaints/settings
+// @access  Private (Admin)
+exports.getSettings = async (req, res) => {
+    try {
+        let settings = await Settings.findOne();
+        if (!settings) settings = await Settings.create({});
+        res.status(200).json({ success: true, data: settings });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// @desc    Update system settings
+// @route   PUT /api/complaints/settings
+// @access  Private (Admin)
+exports.updateSettings = async (req, res) => {
+    try {
+        let settings = await Settings.findOne();
+        if (!settings) settings = await Settings.create({});
+
+        settings.isAutoAssignEnabled = req.body.isAutoAssignEnabled !== undefined ? req.body.isAutoAssignEnabled : settings.isAutoAssignEnabled;
+        settings.autoAssignIntervalMinutes = req.body.autoAssignIntervalMinutes || settings.autoAssignIntervalMinutes;
+
+        await settings.save();
+        res.status(200).json({ success: true, data: settings });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// @desc    Manual trigger of auto-assignment (for compatibility)
+// @route   POST /api/complaints/auto-assign
+// @access  Private (Admin)
+exports.autoAssignComplaints = async (req, res) => {
+    const count = await runAutoAssignmentInternal();
+    res.status(200).json({
+        success: true,
+        message: `Successfully auto-assigned ${count} complaints.`,
+        count
+    });
+};
+
 exports.getPublicStats = async (req, res) => {
     try {
         const totalComplaints = await Complaint.countDocuments();
@@ -253,6 +453,23 @@ exports.getPublicStats = async (req, res) => {
                 resolvedComplaints,
                 totalStaff
             }
+        });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+// @desc    Get messages for a complaint
+// @route   GET /api/complaints/:id/messages
+// @access  Private
+exports.getComplaintMessages = async (req, res) => {
+    try {
+        const messages = await Message.find({ complaint: req.params.id })
+            .populate('sender', 'name role')
+            .sort('createdAt');
+
+        res.status(200).json({
+            success: true,
+            data: messages
         });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });

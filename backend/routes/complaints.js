@@ -6,7 +6,11 @@ const {
     updateComplaint,
     getComplaintByUniqueId,
     getAnalytics,
-    getPublicStats
+    getPublicStats,
+    autoAssignComplaints,
+    getSettings,
+    updateSettings,
+    getComplaintMessages
 } = require('../controllers/complaints');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -19,6 +23,9 @@ router.get('/public/stats', getPublicStats);
 router.use(protect);
 
 router.get('/analytics', authorize('Admin'), getAnalytics);
+router.post('/auto-assign', authorize('Admin'), autoAssignComplaints);
+router.get('/settings', authorize('Admin'), getSettings);
+router.put('/settings', authorize('Admin'), updateSettings);
 router.get('/track/:uid', getComplaintByUniqueId);
 
 router
@@ -30,5 +37,7 @@ router
     .route('/:id')
     .get(getComplaint)
     .put(updateComplaint);
+
+router.get('/:id/messages', getComplaintMessages);
 
 module.exports = router;

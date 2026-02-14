@@ -14,7 +14,8 @@ import {
     Calendar,
     User,
     ChevronRight,
-    Loader2
+    Loader2,
+    LayoutDashboard
 } from 'lucide-react';
 
 const ComplaintList = () => {
@@ -25,12 +26,27 @@ const ComplaintList = () => {
     const [role, setRole] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('All');
+    const [autoAssignEnabled, setAutoAssignEnabled] = useState(false);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
-        if (user) setRole(user.role);
+        if (user) {
+            setRole(user.role);
+            if (user.role === 'Admin') fetchSettings();
+        }
         fetchComplaints();
     }, []);
+
+    const fetchSettings = async () => {
+        try {
+            const res = await api.get('/complaints/settings');
+            if (res.data.success) {
+                setAutoAssignEnabled(res.data.data.isAutoAssignEnabled);
+            }
+        } catch (err) {
+            console.error('Failed to fetch settings');
+        }
+    };
 
     const fetchComplaints = async () => {
         try {
@@ -67,6 +83,16 @@ const ComplaintList = () => {
             case 'Resolved': return 'bg-green-50 text-green-600 border-green-100';
             case 'Closed': return 'bg-slate-50 text-slate-600 border-slate-100';
             default: return 'bg-slate-50 text-slate-600 border-slate-100';
+        }
+    };
+
+    const getPriorityColor = (priority) => {
+        switch (priority) {
+            case 'Low': return 'bg-slate-100 text-slate-600';
+            case 'Medium': return 'bg-blue-100 text-blue-600';
+            case 'High': return 'bg-orange-100 text-orange-600';
+            case 'Urgent': return 'bg-red-500 text-white shadow-lg shadow-red-500/20';
+            default: return 'bg-slate-100 text-slate-600';
         }
     };
 
@@ -107,6 +133,33 @@ const ComplaintList = () => {
                             </p>
                         </div>
 
+                        {role === 'Admin' && (
+                            <button
+                                onClick={async () => {
+                                    try {
+                                        const res = await api.put('/complaints/settings', {
+                                            isAutoAssignEnabled: !autoAssignEnabled
+                                        });
+                                        if (res.data.success) {
+                                            setAutoAssignEnabled(res.data.data.isAutoAssignEnabled);
+                                            // Trigger an immediate run if enabled
+                                            if (res.data.data.isAutoAssignEnabled) {
+                                                await api.post('/complaints/auto-assign');
+                                                fetchComplaints();
+                                            }
+                                        }
+                                    } catch (err) {
+                                        alert('Failed to update auto-assign setting');
+                                    }
+                                }}
+                                className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-bold shadow-xl transition-all active:scale-95 ${autoAssignEnabled
+                                    ? 'bg-green-600 text-white shadow-green-600/10 hover:bg-green-700'
+                                    : 'bg-slate-200 text-slate-600 shadow-black/5 hover:bg-slate-300'}`}
+                            >
+                                <LayoutDashboard size={20} />
+                                {autoAssignEnabled ? 'Auto-Assign: ON' : 'Auto-Assign: OFF'}
+                            </button>
+                        )}
                         {role === 'User' && (
                             <Link
                                 to="/complaints/new"
@@ -199,10 +252,19 @@ const ComplaintList = () => {
                                                 <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${getStatusColor(complaint.status)}`}>
                                                     {complaint.status}
                                                 </div>
+                                                <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${getPriorityColor(complaint.priority)}`}>
+                                                    {complaint.priority}
+                                                </div>
+                                                {complaint.isEscalated && (
+                                                    <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-red-50 text-red-600 text-[10px] font-black uppercase tracking-widest border border-red-100 animate-pulse">
+                                                        <AlertCircle size={12} />
+                                                        SLA Breached
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <div className="space-y-1">
-                                                <h3 className="text-xl font-bold text-black group-hover:text-black transition-colors">
+                                                <h3 className="text-xl font-bold text-black group-hover:text-black transition-colors flex items-center gap-3">
                                                     {complaint.title}
                                                 </h3>
                                                 <p className="text-slate-500 font-medium line-clamp-1 max-w-2xl">

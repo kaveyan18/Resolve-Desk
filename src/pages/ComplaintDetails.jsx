@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import NavBar from '../components/navBar';
 import Footer from '../components/Footer';
 import api from '../utils/api';
+import { io } from 'socket.io-client';
 import {
     Clock,
     Calendar,
@@ -19,8 +20,13 @@ import {
     Briefcase,
     FileText,
     Star,
-    Heart
+    Heart,
+    Send,
+    X,
+    MessageCircle
 } from 'lucide-react';
+
+const socket = io('http://localhost:5000');
 
 const ComplaintDetails = () => {
     const { id } = useParams();
@@ -34,14 +40,55 @@ const ComplaintDetails = () => {
     const [updateMsg, setUpdateMsg] = useState('');
     const [note, setNote] = useState('');
     const [feedback, setFeedback] = useState({ rating: 0, comment: '' });
-    const [submittingFeedback, setSubmittingFeedback] = useState(false);
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
+    const [showChat, setShowChat] = useState(false);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
-        if (user) setRole(user.role);
+        if (user) {
+            setRole(user.role);
+            setCurrentUser(user);
+        }
         fetchComplaint();
+        fetchMessages();
         if (user.role === 'Admin') fetchStaff();
+
+        // Socket logic
+        socket.emit('join_room', id);
+
+        socket.on('receive_message', (message) => {
+            setMessages((prev) => [...prev, message]);
+        });
+
+        return () => {
+            socket.off('receive_message');
+        };
     }, [id]);
+
+    const fetchMessages = async () => {
+        try {
+            const res = await api.get(`/complaints/${id}/messages`);
+            if (res.data.success) {
+                setMessages(res.data.data);
+            }
+        } catch (err) {
+            console.error('Error fetching messages:', err);
+        }
+    };
+
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        if (newMessage.trim() && currentUser) {
+            socket.emit('send_message', {
+                complaintId: id,
+                senderId: currentUser.id || currentUser._id,
+                text: newMessage
+            });
+            setNewMessage('');
+        }
+    };
 
     const fetchComplaint = async () => {
         try {
@@ -148,6 +195,16 @@ const ComplaintDetails = () => {
         }
     };
 
+    const getPriorityColor = (priority) => {
+        switch (priority) {
+            case 'Low': return 'bg-slate-100 text-slate-600';
+            case 'Medium': return 'bg-blue-100 text-blue-600';
+            case 'High': return 'bg-orange-100 text-orange-600';
+            case 'Urgent': return 'bg-red-500 text-white shadow-lg shadow-red-500/20';
+            default: return 'bg-slate-100 text-slate-600';
+        }
+    };
+
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             month: 'long',
@@ -201,6 +258,15 @@ const ComplaintDetails = () => {
                                     <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${getStatusColor(complaint.status)}`}>
                                         {complaint.status}
                                     </div>
+                                    <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${getPriorityColor(complaint.priority)}`}>
+                                        {complaint.priority}
+                                    </div>
+                                    {complaint.isEscalated && (
+                                        <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-red-50 text-red-600 text-[10px] font-black uppercase tracking-widest border border-red-100 animate-pulse">
+                                            <AlertCircle size={12} />
+                                            SLA Breached
+                                        </div>
+                                    )}
                                 </div>
 
                                 <h1 className="text-4xl font-black text-black tracking-tight leading-tight">
@@ -323,6 +389,8 @@ const ComplaintDetails = () => {
                                 </div>
                             )}
 
+                            {/* Removed embedded chat - now a popup */}
+
                             {/* Resolution Notes Section */}
                             <div className="pt-8 border-t border-slate-100">
                                 <h3 className="text-sm font-black text-black uppercase tracking-widest mb-4 flex items-center gap-2">
@@ -442,6 +510,98 @@ const ComplaintDetails = () => {
                     </div>
                 </div>
             </main>
+
+            {/* Chat Popup Widget */}
+            <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-4">
+                {showChat && (
+                    <div className="w-[380px] h-[550px] bg-white rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.15)] border border-black/5 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+                        {/* Chat Header */}
+                        <div className="bg-black p-6 flex items-center justify-between text-white">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center relative">
+                                    <MessageCircle size={20} />
+                                    <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-black"></div>
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-black uppercase tracking-widest">Support Chat</h4>
+                                    <p className="text-[10px] font-bold opacity-50 uppercase tracking-widest">Case ID: {complaint.complaint_unique_id}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setShowChat(false)}
+                                className="p-2 hover:bg-white/10 rounded-xl transition-all"
+                            >
+                                <X size={18} />
+                            </button>
+                        </div>
+
+                        {/* Messages Area */}
+                        <div className="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50/50">
+                            {messages.length === 0 ? (
+                                <div className="h-full flex flex-col items-center justify-center text-slate-300 space-y-2">
+                                    <MessageSquare size={32} strokeWidth={1} />
+                                    <p className="text-[10px] font-black uppercase tracking-widest">No messages yet</p>
+                                </div>
+                            ) : (
+                                messages.map((msg, index) => {
+                                    const isMine = msg.sender?._id === (currentUser?.id || currentUser?._id);
+                                    return (
+                                        <div key={index} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+                                            <div className={`max-w-[85%] p-4 rounded-2xl text-sm shadow-sm ${isMine ? 'bg-black text-white rounded-tr-none' : 'bg-white text-black rounded-tl-none border border-black/5'}`}>
+                                                {!isMine && (
+                                                    <p className="text-[9px] font-black uppercase tracking-widest mb-1 opacity-50">
+                                                        {msg.sender?.name}
+                                                    </p>
+                                                )}
+                                                <p className="font-medium leading-relaxed">{msg.text}</p>
+                                                <p className={`text-[8px] mt-2 opacity-30 font-bold uppercase tracking-widest ${isMine ? 'text-right' : 'text-left'}`}>
+                                                    {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
+
+                        {/* Input Area */}
+                        <div className="p-4 bg-white border-t border-black/5">
+                            <form onSubmit={handleSendMessage} className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    placeholder="Message staff..."
+                                    className="flex-grow bg-slate-50 border-none focus:ring-2 focus:ring-black/5 rounded-2xl px-5 text-sm font-medium"
+                                />
+                                <button
+                                    type="submit"
+                                    className="w-12 h-12 bg-black text-white rounded-2xl flex items-center justify-center hover:scale-[1.05] active:scale-95 transition-all shadow-lg shadow-black/10"
+                                >
+                                    <Send size={18} />
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* Floating Button */}
+                <button
+                    onClick={() => setShowChat(!showChat)}
+                    className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${showChat ? 'bg-slate-100 text-black rotate-90' : 'bg-black text-white hover:scale-105'}`}
+                >
+                    {showChat ? <X size={24} /> : (
+                        <div className="relative">
+                            <MessageCircle size={28} />
+                            {messages.length > 0 && !showChat && (
+                                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-black flex items-center justify-center">
+                                    <span className="text-[8px] font-black text-white">{messages.length > 9 ? '9+' : messages.length}</span>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </button>
+            </div>
 
             <Footer />
         </div>

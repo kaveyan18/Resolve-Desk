@@ -146,11 +146,7 @@ const Profile = () => {
 
                     {/* Profile Header */}
                     <div className="relative mb-12">
-                        <div className="h-56 w-full bg-gradient-to-tr from-slate-900 via-slate-800 to-black rounded-[3rem] overflow-hidden shadow-2xl">
-                            <div className="absolute inset-0 opacity-30">
-                                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.15),transparent)]"></div>
-                                <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_70%,rgba(255,255,255,0.1),transparent)]"></div>
-                            </div>
+                        <div className="h-56 w-full bg-black rounded-[3rem] overflow-hidden shadow-2xl">
                         </div>
 
                         <div className="absolute -bottom-12 left-12 flex items-end gap-8">
@@ -296,8 +292,8 @@ const Profile = () => {
                                                     onChange={handleInputChange}
                                                     disabled={!editMode}
                                                     className={`w-full pl-14 pr-6 py-4 rounded-2xl font-bold transition-all ${editMode
-                                                            ? 'bg-slate-50 border-black/10 focus:ring-4 focus:ring-black/5'
-                                                            : 'bg-transparent border-transparent grayscale italic text-slate-700'
+                                                        ? 'bg-slate-50 border-black/10 focus:ring-4 focus:ring-black/5'
+                                                        : 'bg-transparent border-transparent grayscale italic text-slate-700'
                                                         }`}
                                                 />
                                             </div>
@@ -317,8 +313,8 @@ const Profile = () => {
                                                     disabled={!editMode}
                                                     placeholder="e.g. +91 9876543210"
                                                     className={`w-full pl-14 pr-6 py-4 rounded-2xl font-bold transition-all ${editMode
-                                                            ? 'bg-slate-50 border-black/10 focus:ring-4 focus:ring-black/5'
-                                                            : 'bg-transparent border-transparent grayscale italic text-slate-700'
+                                                        ? 'bg-slate-50 border-black/10 focus:ring-4 focus:ring-black/5'
+                                                        : 'bg-transparent border-transparent grayscale italic text-slate-700'
                                                         }`}
                                                 />
                                             </div>

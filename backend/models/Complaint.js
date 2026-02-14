@@ -55,6 +55,15 @@ const complaintSchema = new mongoose.Schema({
             default: ''
         }
     },
+    priority: {
+        type: String,
+        enum: ['Low', 'Medium', 'High', 'Urgent'],
+        default: 'Medium'
+    },
+    isEscalated: {
+        type: Boolean,
+        default: false
+    },
     sla_deadline: {
         type: Date
     },
