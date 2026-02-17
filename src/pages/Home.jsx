@@ -10,8 +10,17 @@ function Home() {
         resolvedComplaints: 0,
         totalStaff: 0
     });
+    const [isLogged, setIsLogged] = useState(false);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        const userData = localStorage.getItem('user');
+        if (token && userData) {
+            setIsLogged(true);
+            setUser(JSON.parse(userData));
+        }
+
         const fetchStats = async () => {
             try {
                 const res = await api.get('/complaints/public/stats');
@@ -83,8 +92,11 @@ function Home() {
                         Submit complaints, monitor progress in real time, and ensure faster resolution through a centralized grievance management system.
                     </p>
                     <div className="flex flex-col items-start gap-6 pt-4">
-                        <Link to="/complaints" className="bg-black text-white px-10 py-4 rounded-full font-bold text-lg hover:opacity-80 transition-opacity shadow-xl shadow-black/10">
-                            Get Started
+                        <Link
+                            to={isLogged ? "/complaints" : "/login"}
+                            className="bg-black text-white px-10 py-4 rounded-full font-bold text-lg hover:opacity-80 transition-opacity shadow-xl shadow-black/10"
+                        >
+                            {isLogged ? "View Complaints" : "Get Started"}
                         </Link>
                         <div className="flex items-center gap-2 group cursor-pointer">
                             <div className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-black transition-colors"></div>
@@ -192,12 +204,17 @@ function Home() {
                             </div>
 
                             <div className="flex flex-wrap items-center justify-center gap-6 pt-4">
-                                <Link to="/login" className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5">
-                                    Raise a Complaint
+                                <Link
+                                    to={isLogged ? (user?.role === 'User' ? "/complaints/new" : "/complaints") : "/login"}
+                                    className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5"
+                                >
+                                    {isLogged ? (user?.role === 'User' ? "Raise a Complaint" : "View Dashboard") : "Raise a Complaint"}
                                 </Link>
-                                <Link to="/register" className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5">
-                                    Register Now
-                                </Link>
+                                {!isLogged && (
+                                    <Link to="/register" className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5">
+                                        Register Now
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>

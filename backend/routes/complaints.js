@@ -10,7 +10,8 @@ const {
     autoAssignComplaints,
     getSettings,
     updateSettings,
-    getComplaintMessages
+    getComplaintMessages,
+    exportComplaints
 } = require('../controllers/complaints');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -23,6 +24,7 @@ router.get('/public/stats', getPublicStats);
 router.use(protect);
 
 router.get('/analytics', authorize('Admin'), getAnalytics);
+router.get('/export', authorize('Admin'), exportComplaints);
 router.post('/auto-assign', authorize('Admin'), autoAssignComplaints);
 router.get('/settings', authorize('Admin'), getSettings);
 router.put('/settings', authorize('Admin'), updateSettings);

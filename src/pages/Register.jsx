@@ -18,6 +18,12 @@ const Register = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    React.useEffect(() => {
+        if (localStorage.getItem('token')) {
+            navigate('/');
+        }
+    }, [navigate]);
+
     const staffSkills = ['Plumbing', 'Electrical', 'Facility', 'IT Support', 'Security', 'Maintenance'];
 
     const toggleSkill = (skill) => {

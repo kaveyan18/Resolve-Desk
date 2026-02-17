@@ -9,6 +9,7 @@ import NewComplaint from './pages/NewComplaint'
 import ComplaintDetails from './pages/ComplaintDetails'
 import TrackStatus from './pages/TrackStatus'
 import AdminAnalytics from './pages/AdminAnalytics'
+import UserManagement from './pages/UserManagement'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         {/* Admin Only */}
         <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
           <Route path="/analytics" element={<AdminAnalytics />} />
+          <Route path="/users" element={<UserManagement />} />
         </Route>
       </Routes>
     </Router>

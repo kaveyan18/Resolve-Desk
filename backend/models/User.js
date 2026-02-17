@@ -34,6 +34,16 @@ const userSchema = new mongoose.Schema({
         type: [String],
         default: []
     },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    isApproved: {
+        type: Boolean,
+        default: function () {
+            return this.role !== 'Staff'; // Staff needs approval, others are pre-approved
+        }
+    },
     createdAt: {
         type: Date,
         default: Date.now

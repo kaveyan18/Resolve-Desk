@@ -14,6 +14,12 @@ const Login = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    React.useEffect(() => {
+        if (localStorage.getItem('token')) {
+            navigate('/');
+        }
+    }, [navigate]);
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -76,7 +82,13 @@ const Login = () => {
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-black uppercase tracking-widest ml-1 flex justify-between">
                                     <span>Password</span>
-                                    <a href="#" className="text-xs font-bold text-black lowercase tracking-normal hover:underline">Forgot?</a>
+                                    <button
+                                        type="button"
+                                        onClick={() => alert('Password recovery system coming soon. Please contact administrator.')}
+                                        className="text-xs font-bold text-black lowercase tracking-normal hover:underline"
+                                    >
+                                        Forgot?
+                                    </button>
                                 </label>
                                 <input
                                     type="password"
@@ -98,8 +110,8 @@ const Login = () => {
                                             type="button"
                                             onClick={() => setRole(r)}
                                             className={`py-3 rounded-xl font-bold transition-all border ${role === r
-                                                    ? 'bg-black text-white border-black shadow-lg shadow-black/10'
-                                                    : 'bg-white text-slate-500 border-black/[0.05] hover:border-black/20'
+                                                ? 'bg-black text-white border-black shadow-lg shadow-black/10'
+                                                : 'bg-white text-slate-500 border-black/[0.05] hover:border-black/20'
                                                 }`}
                                         >
                                             {r}

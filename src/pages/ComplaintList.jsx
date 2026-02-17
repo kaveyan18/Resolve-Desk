@@ -65,10 +65,10 @@ const ComplaintList = () => {
 
     const filteredComplaints = complaints.filter(c => {
         const matchesSearch =
-            c.complaint_unique_id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            c.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            c.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            c.user?.name?.toLowerCase().includes(searchTerm.toLowerCase());
+            (c.complaint_unique_id?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+            (c.title?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+            (c.category?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+            (c.user?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase());
 
         const matchesFilter = filterStatus === 'All' || c.status === filterStatus;
 

@@ -26,7 +26,7 @@ import {
     MessageCircle
 } from 'lucide-react';
 
-const socket = io('http://localhost:5000');
+const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:5000');
 
 const ComplaintDetails = () => {
     const { id } = useParams();
@@ -44,6 +44,7 @@ const ComplaintDetails = () => {
     const [newMessage, setNewMessage] = useState('');
     const [currentUser, setCurrentUser] = useState(null);
     const [showChat, setShowChat] = useState(false);
+    const [submittingFeedback, setSubmittingFeedback] = useState(false);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -137,7 +138,6 @@ const ComplaintDetails = () => {
     const handleUpdateStatus = async (newStatus) => {
         setUpdating(true);
         try {
-            const res = await api.get(`/complaints/${id}`); // Refresh to get latest notes
             const res2 = await api.put(`/complaints/${id}`, { status: newStatus });
             if (res2.data.success) {
                 setComplaint(res2.data.data);
@@ -377,15 +377,22 @@ const ComplaintDetails = () => {
                                         <Paperclip size={16} />
                                         Attachments
                                     </h3>
-                                    <div className="flex items-center gap-3 p-4 border border-black/[0.05] rounded-2xl w-fit group cursor-pointer hover:bg-black hover:text-white transition-all">
+                                    <a
+                                        href={complaint.attachment}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-3 p-4 border border-black/[0.05] rounded-2xl w-fit group cursor-pointer hover:bg-black hover:text-white transition-all"
+                                    >
                                         <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-white/10 group-hover:text-white">
                                             <Paperclip size={18} />
                                         </div>
                                         <div className="pr-4">
-                                            <p className="text-xs font-bold">attachment_file.pdf</p>
+                                            <p className="text-xs font-bold">
+                                                {complaint.attachment.split('/').pop() || 'View Attachment'}
+                                            </p>
                                             <p className="text-[10px] font-bold opacity-50 uppercase tracking-widest">Click to view</p>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             )}
 

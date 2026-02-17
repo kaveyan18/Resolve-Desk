@@ -68,9 +68,14 @@ const NavBar = () => {
                                 Track
                             </Link>
                             {user?.role === 'Admin' && (
-                                <Link to="/analytics" className={`px-6 py-2.5 text-[0.95rem] font-bold rounded-full transition-all ${location.pathname === '/analytics' ? 'bg-black text-white' : 'text-[#64748b] hover:text-black'}`}>
-                                    Analytics
-                                </Link>
+                                <>
+                                    <Link to="/analytics" className={`px-6 py-2.5 text-[0.95rem] font-bold rounded-full transition-all ${location.pathname === '/analytics' ? 'bg-black text-white' : 'text-[#64748b] hover:text-black'}`}>
+                                        Analytics
+                                    </Link>
+                                    <Link to="/users" className={`px-6 py-2.5 text-[0.95rem] font-bold rounded-full transition-all ${location.pathname === '/users' ? 'bg-black text-white' : 'text-[#64748b] hover:text-black'}`}>
+                                        Users
+                                    </Link>
+                                </>
                             )}
                             <Link to="/complaints" className={`px-6 py-2.5 text-[0.95rem] font-bold rounded-full transition-all ${location.pathname.startsWith('/complaints') ? 'bg-black text-white' : 'text-[#64748b] hover:text-black'}`}>
                                 Complaints

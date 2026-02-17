@@ -475,3 +475,41 @@ exports.getComplaintMessages = async (req, res) => {
         res.status(400).json({ success: false, message: err.message });
     }
 };
+
+// @desc    Export complaints to CSV
+// @route   GET /api/complaints/export
+// @access  Private (Admin)
+exports.exportComplaints = async (req, res) => {
+    try {
+        const complaints = await Complaint.find()
+            .populate('user', 'name email')
+            .populate('assignedTo', 'name email')
+            .sort('-createdAt');
+
+        // CSV Header
+        let csv = 'ID,Date,User,Email,Title,Category,Status,Priority,Assigned To,Deadline,Escalated\n';
+
+        // Add rows
+        complaints.forEach(c => {
+            const date = new Date(c.createdAt).toLocaleDateString();
+            const deadline = c.sla_deadline ? new Date(c.sla_deadline).toLocaleDateString() : 'N/A';
+            const userName = c.user?.name || 'Deleted User';
+            const userEmail = c.user?.email || 'N/A';
+            const staffName = c.assignedTo?.name || 'Unassigned';
+
+            // Escape commas and quotes for CSV
+            const title = `"${c.title.replace(/"/g, '""')}"`;
+
+            csv += `${c.complaint_unique_id},${date},${userName},${userEmail},${title},${c.category},${c.status},${c.priority},${staffName},${deadline},${c.isEscalated}\n`;
+        });
+
+        // Set response headers
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=complaints-report-${Date.now()}.csv`);
+        res.status(200).send(csv);
+
+    } catch (err) {
+        console.error('Export error:', err);
+        res.status(500).json({ success: false, message: 'Failed to generate report' });
+    }
+};

@@ -79,7 +79,8 @@ const complaintSchema = new mongoose.Schema({
 complaintSchema.pre('save', async function () {
     if (!this.complaint_unique_id) {
         const count = await this.constructor.countDocuments();
-        this.complaint_unique_id = `COMP-${1000 + count + 1}`;
+        const timestamp = Date.now().toString().slice(-4);
+        this.complaint_unique_id = `COMP-${1000 + count + 1}${timestamp}`;
     }
 
     // Set default SLA (e.g., 48 hours for Open complaints)

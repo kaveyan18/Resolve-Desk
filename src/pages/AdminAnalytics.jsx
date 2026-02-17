@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import {
     LayoutDashboard, Users, ClipboardList, Activity, TrendingUp,
-    CheckCircle2, AlertCircle, Clock, Loader2
+    CheckCircle2, AlertCircle, Clock, Loader2, Download, FileSpreadsheet
 } from 'lucide-react';
 
 const AdminAnalytics = () => {
@@ -32,6 +32,35 @@ const AdminAnalytics = () => {
             console.error(err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleExport = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const response = await fetch(`${baseUrl}/api/complaints/export`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `complaints-report-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            } else {
+                alert('Export failed.');
+            }
+        } catch (err) {
+            console.error('Export error:', err);
+            alert('Failed to export data.');
         }
     };
 
@@ -71,6 +100,14 @@ const AdminAnalytics = () => {
                             </h1>
                             <p className="text-slate-500 font-medium">System-wide performance and user metrics.</p>
                         </div>
+
+                        <button
+                            onClick={handleExport}
+                            className="flex items-center gap-3 px-8 py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-black/10 hover:scale-[1.02] active:scale-95 transition-all"
+                        >
+                            <FileSpreadsheet size={18} />
+                            Export Data (.CSV)
+                        </button>
                     </div>
 
                     {/* Quick Stats Grid */}

@@ -57,6 +57,16 @@ exports.login = async (req, res, next) => {
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
+        // Check if active
+        if (!user.isActive) {
+            return res.status(403).json({ success: false, message: 'Your account has been deactivated. Please contact support.' });
+        }
+
+        // Check if approved (specifically for Staff)
+        if (!user.isApproved) {
+            return res.status(403).json({ success: false, message: 'Your account is pending approval from an administrator.' });
+        }
+
         sendTokenResponse(user, 200, res);
     } catch (err) {
         res.status(400).json({
@@ -123,6 +133,32 @@ exports.updateDetails = async (req, res, next) => {
             new: true,
             runValidators: true
         });
+
+        res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+// @desc    Update user (Admin only)
+// @route   PUT /api/auth/users/:id
+// @access  Private/Admin
+exports.updateUser = async (req, res, next) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
 
         res.status(200).json({
             success: true,
