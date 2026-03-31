@@ -90,15 +90,7 @@
 
 ---
 
-## 📸 Screenshots
 
-*(Add your screenshots here for a professional look!)*
-
-| Login Page | User Dashboard | Admin Analytics |
-| :--- | :--- | :--- |
-| ![Login](./public/screenshots/login.png) | ![User Dash](./public/screenshots/dashboard.png) | ![Admin](./public/screenshots/analytics.png) |
-
----
 
 ## 📂 Project Structure
 
@@ -127,4 +119,4 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ---
 
-Built with ❤️ by [Your Name](https://github.com/yourusername)
+Built with ❤️ by [Kaveyan](https://github.com/kaveyan18)
