@@ -57,6 +57,8 @@ io.on('connection', (socket) => {
     });
 });
 
+const path = require('path');
+
 // Body parser
 app.use(express.json());
 
@@ -68,10 +70,17 @@ app.use('/api/auth', auth);
 app.use('/api/complaints', complaints);
 app.use('/api/notifications', notifications);
 
-// Basic Route
-app.get('/', (req, res) => {
-    res.send('Digital Complaint Portal API is running...');
-});
+// Serve frontend build in production / handle SPA catch-all
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../dist')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../', 'dist', 'index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.send('Digital Complaint Portal API is running...');
+    });
+}
 
 const PORT = process.env.PORT || 5000;
 
