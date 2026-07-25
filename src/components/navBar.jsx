@@ -69,11 +69,11 @@ const NavBar = () => {
                         <a href={isHomePage ? "#features" : "/#features"} className="px-5 py-2.5 text-[0.95rem] font-semibold text-[#64748b] rounded-full transition-all hover:text-black">
                             Features
                         </a>
+                        <Link to="/track" className={`px-6 py-2.5 text-[0.95rem] font-bold rounded-full transition-all ${location.pathname === '/track' ? 'bg-black text-white' : 'text-[#64748b] hover:text-black'}`}>
+                            Track
+                        </Link>
                         {isLogged && (
                             <>
-                                <Link to="/track" className={`px-6 py-2.5 text-[0.95rem] font-bold rounded-full transition-all ${location.pathname === '/track' ? 'bg-black text-white' : 'text-[#64748b] hover:text-black'}`}>
-                                    Track
-                                </Link>
                                 {user?.role === 'Admin' && (
                                     <>
                                         <Link to="/analytics" className={`px-6 py-2.5 text-[0.95rem] font-bold rounded-full transition-all ${location.pathname === '/analytics' ? 'bg-black text-white' : 'text-[#64748b] hover:text-black'}`}>
@@ -155,11 +155,11 @@ const NavBar = () => {
                             <a href={isHomePage ? "#features" : "/#features"} onClick={() => setMobileOpen(false)} className="flex items-center px-4 py-3 rounded-2xl font-semibold text-base text-slate-700 hover:bg-slate-100 transition-all">
                                 Features
                             </a>
+                            <Link to="/track" className={`flex items-center px-4 py-3 rounded-2xl font-bold text-base transition-all ${location.pathname === '/track' ? 'bg-black text-white' : 'text-slate-700 hover:bg-slate-100'}`}>
+                                Track Status
+                            </Link>
                             {isLogged && (
                                 <>
-                                    <Link to="/track" className={`flex items-center px-4 py-3 rounded-2xl font-bold text-base transition-all ${location.pathname === '/track' ? 'bg-black text-white' : 'text-slate-700 hover:bg-slate-100'}`}>
-                                        Track Status
-                                    </Link>
                                     <Link to="/complaints" className={`flex items-center px-4 py-3 rounded-2xl font-bold text-base transition-all ${location.pathname.startsWith('/complaints') ? 'bg-black text-white' : 'text-slate-700 hover:bg-slate-100'}`}>
                                         Complaints
                                     </Link>

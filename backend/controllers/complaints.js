@@ -218,20 +218,15 @@ exports.updateComplaint = async (req, res) => {
 
 // @desc    Get single complaint by unique ID
 // @route   GET /api/complaints/track/:uid
-// @access  Private
+// @access  Public
 exports.getComplaintByUniqueId = async (req, res) => {
     try {
-        const complaint = await Complaint.findOne({ complaint_unique_id: req.params.uid })
+        const complaint = await Complaint.findOne({ complaint_unique_id: req.params.uid.toUpperCase() })
             .populate('user', 'name email')
             .populate('assignedTo', 'name email');
 
         if (!complaint) {
-            return res.status(404).json({ success: false, message: 'Complaint not found' });
-        }
-
-        // Check ownership
-        if (req.user.role !== 'Admin' && complaint.user._id.toString() !== req.user.id && complaint.assignedTo?._id.toString() !== req.user.id) {
-            return res.status(401).json({ success: false, message: 'Not authorized' });
+            return res.status(404).json({ success: false, message: 'Complaint not found with this ID' });
         }
 
         res.status(200).json({ success: true, data: complaint });

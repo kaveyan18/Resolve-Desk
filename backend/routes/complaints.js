@@ -19,6 +19,7 @@ const router = express.Router();
 
 // Public routes
 router.get('/public/stats', getPublicStats);
+router.get('/track/:uid', getComplaintByUniqueId);
 
 // Protected routes
 router.use(protect);
@@ -28,7 +29,6 @@ router.get('/export', authorize('Admin'), exportComplaints);
 router.post('/auto-assign', authorize('Admin'), autoAssignComplaints);
 router.get('/settings', authorize('Admin'), getSettings);
 router.put('/settings', authorize('Admin'), updateSettings);
-router.get('/track/:uid', getComplaintByUniqueId);
 
 router
     .route('/')

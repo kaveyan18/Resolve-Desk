@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -16,9 +17,9 @@ const Footer = () => {
                 <div className="space-y-6">
                     <h3 className="text-lg font-bold">Company</h3>
                     <ul className="space-y-4">
-                        <li><a href="/" className="text-slate-400 hover:text-white transition-colors text-sm">Home</a></li>
-                        <li><a href="/about" className="text-slate-400 hover:text-white transition-colors text-sm">About Us</a></li>
-                        <li><a href="/features" className="text-slate-400 hover:text-white transition-colors text-sm">Features</a></li>
+                        <li><Link to="/" className="text-slate-400 hover:text-white transition-colors text-sm">Home</Link></li>
+                        <li><a href="/#works" className="text-slate-400 hover:text-white transition-colors text-sm">How It Works</a></li>
+                        <li><a href="/#features" className="text-slate-400 hover:text-white transition-colors text-sm">Features</a></li>
                     </ul>
                 </div>
 
@@ -26,9 +27,9 @@ const Footer = () => {
                 <div className="space-y-6">
                     <h3 className="text-lg font-bold">Support</h3>
                     <ul className="space-y-4">
-                        <li><a href="/track" className="text-slate-400 hover:text-white transition-colors text-sm">Track Status</a></li>
-                        <li><a href="/help" className="text-slate-400 hover:text-white transition-colors text-sm">Help Center</a></li>
-                        <li><a href="/contact" className="text-slate-400 hover:text-white transition-colors text-sm">Contact Support</a></li>
+                        <li><Link to="/track" className="text-slate-400 hover:text-white transition-colors text-sm">Track Status</Link></li>
+                        <li><Link to="/track" className="text-slate-400 hover:text-white transition-colors text-sm">Help Center</Link></li>
+                        <li><Link to="/track" className="text-slate-400 hover:text-white transition-colors text-sm">Contact Support</Link></li>
                     </ul>
                 </div>
 
