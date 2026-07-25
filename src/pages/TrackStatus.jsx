@@ -35,15 +35,15 @@ const TrackStatus = () => {
         <div className="flex flex-col min-h-screen bg-[#fcfcfc] font-['Outfit'] select-none">
             <NavBar />
 
-            <main className="flex-grow flex items-center justify-center px-6 py-32">
+            <main className="flex-grow flex items-center justify-center px-4 sm:px-6 py-24 sm:py-32">
                 <div className="w-full max-w-md">
-                    <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/[0.03] space-y-10">
+                    <div className="bg-white p-6 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/[0.03] space-y-8 sm:space-y-10">
                         <div className="text-center space-y-2">
-                            <div className="w-16 h-16 bg-black text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-black/10">
-                                <Activity size={32} />
+                            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-black text-white rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-xl shadow-black/10">
+                                <Activity className="w-7 h-7 sm:w-8 sm:h-8" />
                             </div>
-                            <h1 className="text-4xl font-bold text-black tracking-tight">Track Complaint</h1>
-                            <p className="text-slate-500 font-medium">Enter your Unique Complaint ID (e.g., COMP-1001)</p>
+                            <h1 className="text-2xl sm:text-4xl font-bold text-black tracking-tight">Track Complaint</h1>
+                            <p className="text-slate-500 text-sm sm:text-base font-medium">Enter your Unique Complaint ID (e.g., COMP-1001)</p>
                         </div>
 
                         {error && (

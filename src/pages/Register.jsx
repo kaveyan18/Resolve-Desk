@@ -70,12 +70,12 @@ const Register = () => {
         <div className="flex flex-col min-h-screen bg-[#fcfcfc] font-['Outfit'] select-none">
             <NavBar />
 
-            <main className="flex-grow flex items-center justify-center px-6 py-24 md:py-32">
+            <main className="flex-grow flex items-center justify-center px-4 sm:px-6 py-20 sm:py-32">
                 <div className="w-full max-w-2xl">
-                    <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/[0.03] space-y-10">
+                    <div className="bg-white p-6 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-black/[0.03] space-y-8 sm:space-y-10">
                         <div className="text-center space-y-2">
-                            <h1 className="text-4xl font-bold text-black tracking-tight">Create an Account</h1>
-                            <p className="text-slate-500 font-medium">Join ResolveDesk to start managing complaints.</p>
+                            <h1 className="text-2xl sm:text-4xl font-bold text-black tracking-tight">Create an Account</h1>
+                            <p className="text-slate-500 text-sm sm:text-base font-medium">Join ResolveDesk to start managing complaints.</p>
                         </div>
 
                         {error && (

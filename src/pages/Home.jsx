@@ -84,17 +84,17 @@ function Home() {
 
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section id="hero" className="px-6 pt-32 pb-20 md:px-16 md:pt-48 md:pb-32 max-w-7xl mx-auto flex flex-col items-start gap-8">
-                    <h1 className="text-5xl md:text-7xl font-bold text-black tracking-tight leading-[1.1] max-w-4xl">
+                <section id="hero" className="px-6 pt-28 sm:pt-32 pb-16 md:px-16 md:pt-48 md:pb-32 max-w-7xl mx-auto flex flex-col items-start gap-6 sm:gap-8">
+                    <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-black tracking-tight leading-[1.15] sm:leading-[1.1] max-w-4xl">
                         A Simple, Transparent, and Efficient Way to Raise and Track Complaints
                     </h1>
-                    <p className="text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed">
+                    <p className="text-base sm:text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed">
                         Submit complaints, monitor progress in real time, and ensure faster resolution through a centralized grievance management system.
                     </p>
-                    <div className="flex flex-col items-start gap-6 pt-4">
+                    <div className="flex flex-col items-start gap-6 pt-2 sm:pt-4">
                         <Link
                             to={isLogged ? "/complaints" : "/login"}
-                            className="bg-black text-white px-10 py-4 rounded-full font-bold text-lg hover:opacity-80 transition-opacity shadow-xl shadow-black/10"
+                            className="bg-black text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:opacity-80 transition-opacity shadow-xl shadow-black/10"
                         >
                             {isLogged ? "View Complaints" : "Get Started"}
                         </Link>
@@ -173,23 +173,23 @@ function Home() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                         {[
                             { value: stats.totalComplaints.toString(), label: 'Total Complaints' },
                             { value: stats.resolvedComplaints.toString(), label: 'Resolved' },
                             { value: '24h', label: 'Avg. Resolution' },
                             { value: stats.totalStaff.toString(), label: 'Total Staff' }
                         ].map((stat, index) => (
-                            <div key={index} className="bg-white p-10 rounded-[2.5rem] border border-black/[0.03] shadow-[0_4px_25px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center text-center space-y-2 hover:shadow-[0_8px_40px_rgba(0,0,0,0.04)] transition-all">
-                                <span className="text-6xl font-bold text-black tracking-tighter">{stat.value}</span>
-                                <span className="text-slate-400 font-medium text-sm border-t border-slate-50 pt-2 w-full">{stat.label}</span>
+                            <div key={index} className="bg-white p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] border border-black/[0.03] shadow-[0_4px_25px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center text-center space-y-2 hover:shadow-[0_8px_40px_rgba(0,0,0,0.04)] transition-all">
+                                <span className="text-4xl sm:text-6xl font-bold text-black tracking-tighter">{stat.value}</span>
+                                <span className="text-slate-400 font-medium text-xs sm:text-sm border-t border-slate-50 pt-2 w-full">{stat.label}</span>
                             </div>
                         ))}
                     </div>
                 </section>
                 {/* CTA Section */}
                 <section className="px-6 py-24 md:px-16 max-w-7xl mx-auto">
-                    <div className="bg-black rounded-[2.5rem] md:rounded-[4rem] p-12 md:p-24 text-center relative overflow-hidden group">
+                    <div className="bg-black rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[4rem] p-8 sm:p-12 md:p-24 text-center relative overflow-hidden group">
                         {/* Background subtle glow */}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none"></div>
 

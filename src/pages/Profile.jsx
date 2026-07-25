@@ -145,23 +145,23 @@ const Profile = () => {
                     )}
 
                     {/* Profile Header */}
-                    <div className="relative mb-12">
-                        <div className="h-56 w-full bg-black rounded-[3rem] overflow-hidden shadow-2xl">
+                    <div className="relative mb-28 sm:mb-12">
+                        <div className="h-44 sm:h-56 w-full bg-black rounded-[2.5rem] sm:rounded-[3rem] overflow-hidden shadow-2xl">
                         </div>
 
-                        <div className="absolute -bottom-12 left-12 flex items-end gap-8">
-                            <div className="w-40 h-40 bg-white rounded-[2.5rem] shadow-2xl flex items-center justify-center border-[10px] border-[#fcfcfc]">
-                                <div className="w-full h-full bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300">
-                                    <User size={80} strokeWidth={1} />
+                        <div className="absolute -bottom-20 sm:-bottom-12 left-6 sm:left-12 flex flex-col sm:flex-row items-start sm:items-end gap-4 sm:gap-8 right-6">
+                            <div className="w-28 h-28 sm:w-40 sm:h-40 bg-white rounded-[2rem] sm:rounded-[2.5rem] shadow-2xl flex items-center justify-center border-[6px] sm:border-[10px] border-[#fcfcfc] shrink-0">
+                                <div className="w-full h-full bg-slate-50 rounded-xl sm:rounded-2xl flex items-center justify-center text-slate-300">
+                                    <User className="w-12 h-12 sm:w-20 sm:h-20" strokeWidth={1} />
                                 </div>
                             </div>
-                            <div className="pb-6">
-                                <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-md">{userData?.name}</h1>
-                                <div className="flex items-center gap-3">
-                                    <span className="px-4 py-1.5 bg-white/10 backdrop-blur-xl text-white rounded-full text-xs font-bold uppercase tracking-[0.2em] border border-white/20">
+                            <div className="pb-0 sm:pb-6">
+                                <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 sm:text-white mb-2 drop-shadow-none sm:drop-shadow-md">{userData?.name}</h1>
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <span className="px-4 py-1.5 bg-black/80 sm:bg-white/10 backdrop-blur-xl text-white rounded-full text-xs font-bold uppercase tracking-[0.2em] border border-white/20">
                                         {userData?.role}
                                     </span>
-                                    <div className="flex items-center gap-1.5 text-white/50 text-sm font-medium">
+                                    <div className="flex items-center gap-1.5 text-slate-500 sm:text-white/50 text-sm font-medium">
                                         <Calendar size={14} />
                                         <span>Joined {formatDate(userData?.createdAt)}</span>
                                     </div>
@@ -170,7 +170,7 @@ const Profile = () => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 sm:mt-24">
                         {/* Sidebar */}
                         <div className="space-y-6">
                             <div className="bg-white p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-black/[0.03]">

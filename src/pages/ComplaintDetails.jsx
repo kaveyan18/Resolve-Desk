@@ -245,7 +245,7 @@ const ComplaintDetails = () => {
                     </Link>
 
                     {/* Header Card */}
-                    <div className="bg-white rounded-[3rem] p-8 md:p-12 border border-black/[0.03] shadow-[0_20px_50px_rgba(0,0,0,0.02)] mb-8">
+                    <div className="bg-white rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 border border-black/[0.03] shadow-[0_20px_50px_rgba(0,0,0,0.02)] mb-8">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8">
                             <div className="space-y-6 flex-grow">
                                 <div className="flex flex-wrap items-center gap-3">
@@ -269,7 +269,7 @@ const ComplaintDetails = () => {
                                     )}
                                 </div>
 
-                                <h1 className="text-4xl font-black text-black tracking-tight leading-tight">
+                                <h1 className="text-2xl md:text-4xl font-black text-black tracking-tight leading-tight">
                                     {complaint.title}
                                 </h1>
 
@@ -519,31 +519,31 @@ const ComplaintDetails = () => {
             </main>
 
             {/* Chat Popup Widget */}
-            <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-4">
+            <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[100] flex flex-col items-end gap-4 max-w-[calc(100vw-2rem)]">
                 {showChat && (
-                    <div className="w-[380px] h-[550px] bg-white rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.15)] border border-black/5 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+                    <div className="w-[calc(100vw-2rem)] sm:w-[380px] h-[70vh] sm:h-[550px] max-h-[600px] bg-white rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_25px_80px_rgba(0,0,0,0.15)] border border-black/5 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
                         {/* Chat Header */}
-                        <div className="bg-black p-6 flex items-center justify-between text-white">
+                        <div className="bg-black p-5 sm:p-6 flex items-center justify-between text-white shrink-0">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center relative">
+                                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center relative shrink-0">
                                     <MessageCircle size={20} />
                                     <div className="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-black"></div>
                                 </div>
-                                <div>
-                                    <h4 className="text-sm font-black uppercase tracking-widest">Support Chat</h4>
-                                    <p className="text-[10px] font-bold opacity-50 uppercase tracking-widest">Case ID: {complaint.complaint_unique_id}</p>
+                                <div className="min-w-0">
+                                    <h4 className="text-sm font-black uppercase tracking-widest truncate">Support Chat</h4>
+                                    <p className="text-[10px] font-bold opacity-50 uppercase tracking-widest truncate">Case ID: {complaint.complaint_unique_id}</p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setShowChat(false)}
-                                className="p-2 hover:bg-white/10 rounded-xl transition-all"
+                                className="p-2 hover:bg-white/10 rounded-xl transition-all shrink-0"
                             >
                                 <X size={18} />
                             </button>
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50/50">
+                        <div className="flex-grow overflow-y-auto p-4 sm:p-6 space-y-4 bg-slate-50/50">
                             {messages.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-slate-300 space-y-2">
                                     <MessageSquare size={32} strokeWidth={1} />
@@ -554,13 +554,13 @@ const ComplaintDetails = () => {
                                     const isMine = msg.sender?._id === (currentUser?.id || currentUser?._id);
                                     return (
                                         <div key={index} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-                                            <div className={`max-w-[85%] p-4 rounded-2xl text-sm shadow-sm ${isMine ? 'bg-black text-white rounded-tr-none' : 'bg-white text-black rounded-tl-none border border-black/5'}`}>
+                                            <div className={`max-w-[85%] p-3.5 sm:p-4 rounded-2xl text-sm shadow-sm ${isMine ? 'bg-black text-white rounded-tr-none' : 'bg-white text-black rounded-tl-none border border-black/5'}`}>
                                                 {!isMine && (
                                                     <p className="text-[9px] font-black uppercase tracking-widest mb-1 opacity-50">
                                                         {msg.sender?.name}
                                                     </p>
                                                 )}
-                                                <p className="font-medium leading-relaxed">{msg.text}</p>
+                                                <p className="font-medium leading-relaxed break-words">{msg.text}</p>
                                                 <p className={`text-[8px] mt-2 opacity-30 font-bold uppercase tracking-widest ${isMine ? 'text-right' : 'text-left'}`}>
                                                     {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </p>
@@ -572,18 +572,18 @@ const ComplaintDetails = () => {
                         </div>
 
                         {/* Input Area */}
-                        <div className="p-4 bg-white border-t border-black/5">
+                        <div className="p-3 sm:p-4 bg-white border-t border-black/5 shrink-0">
                             <form onSubmit={handleSendMessage} className="flex gap-2">
                                 <input
                                     type="text"
                                     value={newMessage}
                                     onChange={(e) => setNewMessage(e.target.value)}
                                     placeholder="Message staff..."
-                                    className="flex-grow bg-slate-50 border-none focus:ring-2 focus:ring-black/5 rounded-2xl px-5 text-sm font-medium"
+                                    className="flex-grow bg-slate-50 border-none focus:ring-2 focus:ring-black/5 rounded-2xl px-4 sm:px-5 py-3 text-sm font-medium"
                                 />
                                 <button
                                     type="submit"
-                                    className="w-12 h-12 bg-black text-white rounded-2xl flex items-center justify-center hover:scale-[1.05] active:scale-95 transition-all shadow-lg shadow-black/10"
+                                    className="w-11 h-11 sm:w-12 sm:h-12 bg-black text-white rounded-2xl flex items-center justify-center hover:scale-[1.05] active:scale-95 transition-all shadow-lg shadow-black/10 shrink-0"
                                 >
                                     <Send size={18} />
                                 </button>
@@ -595,11 +595,11 @@ const ComplaintDetails = () => {
                 {/* Floating Button */}
                 <button
                     onClick={() => setShowChat(!showChat)}
-                    className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${showChat ? 'bg-slate-100 text-black rotate-90' : 'bg-black text-white hover:scale-105'}`}
+                    className={`w-14 h-14 sm:w-16 sm:h-16 rounded-[1.25rem] sm:rounded-[1.5rem] flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${showChat ? 'bg-slate-100 text-black rotate-90' : 'bg-black text-white hover:scale-105'}`}
                 >
                     {showChat ? <X size={24} /> : (
                         <div className="relative">
-                            <MessageCircle size={28} />
+                            <MessageCircle size={26} />
                             {messages.length > 0 && !showChat && (
                                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-black flex items-center justify-center">
                                     <span className="text-[8px] font-black text-white">{messages.length > 9 ? '9+' : messages.length}</span>

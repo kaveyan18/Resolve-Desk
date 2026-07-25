@@ -103,7 +103,7 @@ const AdminAnalytics = () => {
 
                         <button
                             onClick={handleExport}
-                            className="flex items-center gap-3 px-8 py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-black/10 hover:scale-[1.02] active:scale-95 transition-all"
+                            className="w-full sm:w-auto justify-center flex items-center gap-3 px-8 py-4 bg-black text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-black/10 hover:scale-[1.02] active:scale-95 transition-all"
                         >
                             <FileSpreadsheet size={18} />
                             Export Data (.CSV)
@@ -111,8 +111,8 @@ const AdminAnalytics = () => {
                     </div>
 
                     {/* Quick Stats Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div className="bg-white p-8 rounded-[2.5rem] border border-black/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex flex-col gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                        <div className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-black/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex flex-col gap-4">
                             <div className="w-12 h-12 bg-black text-white rounded-2xl flex items-center justify-center shadow-lg shadow-black/10">
                                 <ClipboardList size={24} />
                             </div>
@@ -121,7 +121,7 @@ const AdminAnalytics = () => {
                                 <p className="text-3xl font-black text-black tracking-tighter">{data.totalComplaints}</p>
                             </div>
                         </div>
-                        <div className="bg-white p-8 rounded-[2.5rem] border border-black/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex flex-col gap-4">
+                        <div className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-black/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex flex-col gap-4">
                             <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center">
                                 <Users size={24} />
                             </div>
@@ -130,7 +130,7 @@ const AdminAnalytics = () => {
                                 <p className="text-3xl font-black text-black tracking-tighter">{data.totalStaff}</p>
                             </div>
                         </div>
-                        <div className="bg-white p-8 rounded-[2.5rem] border border-black/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex flex-col gap-4">
+                        <div className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-black/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex flex-col gap-4">
                             <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center">
                                 <CheckCircle2 size={24} />
                             </div>
@@ -141,7 +141,7 @@ const AdminAnalytics = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="bg-white p-8 rounded-[2.5rem] border border-black/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex flex-col gap-4">
+                        <div className="bg-white p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border border-black/[0.03] shadow-[0_10px_40px_rgba(0,0,0,0.02)] flex flex-col gap-4">
                             <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center">
                                 <TrendingUp size={24} />
                             </div>
@@ -159,7 +159,7 @@ const AdminAnalytics = () => {
                     {/* Charts Grid */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {/* Weekly Activity Line Chart */}
-                        <div className="bg-white p-10 rounded-[3rem] border border-black/[0.03] shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
+                        <div className="bg-white p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-black/[0.03] shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
                             <h3 className="text-lg font-black text-black mb-8 flex items-center gap-3">
                                 <Activity size={20} className="text-slate-400" />
                                 Complaint Velocity (7D)
@@ -197,7 +197,7 @@ const AdminAnalytics = () => {
                         </div>
 
                         {/* Category Distribution Bar Chart */}
-                        <div className="bg-white p-10 rounded-[3rem] border border-black/[0.03] shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
+                        <div className="bg-white p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-black/[0.03] shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
                             <h3 className="text-lg font-black text-black mb-8 flex items-center gap-3">
                                 <AlertCircle size={20} className="text-slate-400" />
                                 Distribution by Category
@@ -226,7 +226,7 @@ const AdminAnalytics = () => {
                         </div>
 
                         {/* Status Breakdown Pie Chart */}
-                        <div className="lg:col-span-2 bg-white p-10 rounded-[3rem] border border-black/[0.03] shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
+                        <div className="lg:col-span-2 bg-white p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-black/[0.03] shadow-[0_20px_60px_rgba(0,0,0,0.02)]">
                             <div className="flex flex-col md:flex-row items-center gap-12">
                                 <div className="flex-grow space-y-4">
                                     <h3 className="text-lg font-black text-black flex items-center gap-3">

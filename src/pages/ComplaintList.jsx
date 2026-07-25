@@ -172,7 +172,7 @@ const ComplaintList = () => {
                     </div>
 
                     {/* Stats/Filters Row */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                         <div className="bg-white p-6 rounded-3xl border border-black/5 flex items-center gap-4">
                             <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
                                 <Clock size={24} />
@@ -191,7 +191,7 @@ const ComplaintList = () => {
                                 <p className="text-xl font-black text-black">{complaints.filter(c => c.status === 'Resolved').length}</p>
                             </div>
                         </div>
-                        <div className="md:col-span-2 bg-white px-6 py-4 rounded-3xl border border-black/5 flex items-center gap-4">
+                        <div className="col-span-2 md:col-span-2 bg-white px-6 py-4 rounded-3xl border border-black/5 flex items-center gap-4">
                             <Search className="text-slate-400" size={20} />
                             <input
                                 type="text"
@@ -220,7 +220,7 @@ const ComplaintList = () => {
 
                     {/* Complaints Table/Grid */}
                     {filteredComplaints.length === 0 ? (
-                        <div className="bg-white rounded-[3rem] p-20 text-center border border-dashed border-black/10">
+                        <div className="bg-white rounded-[3rem] p-10 sm:p-20 text-center border border-dashed border-black/10">
                             <div className="w-20 h-20 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-6">
                                 <AlertCircle size={40} />
                             </div>

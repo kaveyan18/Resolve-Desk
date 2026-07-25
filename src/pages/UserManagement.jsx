@@ -134,23 +134,23 @@ const UserManagement = () => {
                             <p className="text-slate-500 font-medium">Control access, approve staff, and manage system users.</p>
                         </div>
 
-                        <div className="flex items-center gap-4">
-                            <div className="bg-white px-6 py-3 rounded-2xl border border-black/5 flex items-center gap-3">
-                                <Search size={18} className="text-slate-400" />
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                            <div className="bg-white px-6 py-3 rounded-2xl border border-black/5 flex items-center gap-3 flex-grow sm:flex-grow-0">
+                                <Search size={18} className="text-slate-400 shrink-0" />
                                 <input
                                     type="text"
                                     placeholder="Search users..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="bg-transparent border-none focus:ring-0 text-sm font-bold text-slate-700 placeholder:text-slate-400 w-48"
+                                    className="bg-transparent border-none focus:ring-0 text-sm font-bold text-slate-700 placeholder:text-slate-400 w-full sm:w-48"
                                 />
                             </div>
                             <div className="bg-white px-4 py-3 rounded-2xl border border-black/5 flex items-center gap-2">
-                                <Filter size={18} className="text-slate-400" />
+                                <Filter size={18} className="text-slate-400 shrink-0" />
                                 <select
                                     value={filterRole}
                                     onChange={(e) => setFilterRole(e.target.value)}
-                                    className="bg-transparent border-none focus:ring-0 text-sm font-bold text-slate-700 cursor-pointer appearance-none"
+                                    className="bg-transparent border-none focus:ring-0 text-sm font-bold text-slate-700 cursor-pointer appearance-none w-full"
                                 >
                                     <option value="All">All Roles</option>
                                     <option value="Admin">Admin</option>
@@ -162,8 +162,8 @@ const UserManagement = () => {
                     </div>
 
                     {/* Users Table */}
-                    <div className="bg-white rounded-[3rem] border border-black/[0.03] shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
-                        <table className="w-full text-left border-collapse">
+                    <div className="bg-white rounded-[2rem] sm:rounded-[3rem] border border-black/[0.03] shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-x-auto">
+                        <table className="w-full text-left border-collapse min-w-[640px]">
                             <thead>
                                 <tr className="border-b border-black/[0.03]">
                                     <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">User Details</th>
