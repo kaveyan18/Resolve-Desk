@@ -84,39 +84,39 @@ function Home() {
 
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section id="hero" className="px-6 pt-28 sm:pt-32 pb-16 md:px-16 md:pt-48 md:pb-32 max-w-7xl mx-auto flex flex-col items-start gap-6 sm:gap-8">
+                <section id="hero" className="px-6 pt-28 sm:pt-36 pb-14 sm:pb-24 md:px-16 max-w-7xl mx-auto flex flex-col items-start gap-6 sm:gap-8">
                     <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-black tracking-tight leading-[1.15] sm:leading-[1.1] max-w-4xl">
                         A Simple, Transparent, and Efficient Way to Raise and Track Complaints
                     </h1>
                     <p className="text-base sm:text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed">
                         Submit complaints, monitor progress in real time, and ensure faster resolution through a centralized grievance management system.
                     </p>
-                    <div className="flex flex-col items-start gap-6 pt-2 sm:pt-4">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2 sm:pt-4 w-full sm:w-auto">
                         <Link
                             to={isLogged ? "/complaints" : "/login"}
-                            className="bg-black text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:opacity-80 transition-opacity shadow-xl shadow-black/10"
+                            className="bg-black text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:opacity-80 transition-opacity shadow-xl shadow-black/10 text-center"
                         >
                             {isLogged ? "View Complaints" : "Get Started"}
                         </Link>
-                        <div className="flex items-center gap-2 group cursor-pointer">
+                        <div className="flex items-center justify-center sm:justify-start gap-2 group cursor-pointer py-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-black transition-colors"></div>
-                            <span className="text-slate-400 group-hover:text-black transition-colors text-sm font-medium">Scroll</span>
+                            <span className="text-slate-400 group-hover:text-black transition-colors text-sm font-medium">Scroll down to explore</span>
                         </div>
                     </div>
                 </section>
 
                 {/* How It Works Section */}
-                <section id="works" className="px-6 py-24 md:px-16 bg-white">
-                    <div className="max-w-7xl mx-auto text-center space-y-4 mb-20">
-                        <h2 className="text-4xl md:text-5xl font-bold text-black tracking-tight">How It Works</h2>
-                        <p className="text-slate-400 text-lg">A seamless process from submission to resolution.</p>
+                <section id="works" className="px-6 py-14 sm:py-24 md:px-16 bg-white">
+                    <div className="max-w-7xl mx-auto text-center space-y-3 mb-10 sm:mb-20">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black tracking-tight">How It Works</h2>
+                        <p className="text-slate-400 text-base sm:text-lg">A seamless process from submission to resolution.</p>
                     </div>
 
-                    <div className="max-w-6xl mx-auto relative px-4">
+                    <div className="max-w-6xl mx-auto relative px-2 sm:px-4">
                         {/* Connecting Line */}
                         <div className="absolute top-8 left-0 w-full h-[1px] bg-[#e2e8f0] hidden md:block"></div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 relative">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 sm:gap-12 relative">
                             {[
                                 { step: '1', title: 'Register & Login', desc: 'Create your account to get started.' },
                                 { step: '2', title: 'Submit Details', desc: 'Provide complaint details and attachments.' },
@@ -124,13 +124,13 @@ function Home() {
                                 { step: '4', title: 'Track Status', desc: 'Get real-time updates on progress.' },
                                 { step: '5', title: 'Resolution', desc: 'Issue resolved and ticket closed.' }
                             ].map((item, index) => (
-                                <div key={index} className="flex flex-col items-center text-center space-y-6 group">
-                                    <div className="w-16 h-16 rounded-full bg-black text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-black/20 z-10 transition-transform group-hover:scale-110">
+                                <div key={index} className="flex flex-col items-center text-center space-y-4 sm:space-y-6 group">
+                                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-black text-white flex items-center justify-center text-lg sm:text-xl font-bold shadow-lg shadow-black/20 z-10 transition-transform group-hover:scale-110 shrink-0">
                                         {item.step}
                                     </div>
-                                    <div className="space-y-2">
-                                        <h3 className="font-bold text-black text-lg">{item.title}</h3>
-                                        <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                                    <div className="space-y-1 sm:space-y-2">
+                                        <h3 className="font-bold text-black text-base sm:text-lg">{item.title}</h3>
+                                        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-xs">{item.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -139,36 +139,36 @@ function Home() {
                 </section>
 
                 {/* Features Section */}
-                <section id="features" className="px-6 py-24 md:px-16 bg-slate-50 border-y border-black/[0.03]">
+                <section id="features" className="px-6 py-14 sm:py-24 md:px-16 bg-slate-50 border-y border-black/[0.03]">
                     <div className="max-w-7xl mx-auto">
-                        <div className="space-y-4 mb-16">
-                            <h2 className="text-4xl md:text-5xl font-bold text-black tracking-tight">Powerful Features</h2>
-                            <p className="text-slate-500 text-lg max-w-2xl italic">Designed for efficiency, security, and transparency.</p>
+                        <div className="space-y-3 mb-10 sm:mb-16">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black tracking-tight">Powerful Features</h2>
+                            <p className="text-slate-500 text-base sm:text-lg max-w-2xl italic">Designed for efficiency, security, and transparency.</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                             {features.map((feature, index) => (
-                                <div key={index} className="bg-white p-8 rounded-3xl border border-black/[0.03] shadow-sm hover:shadow-xl hover:shadow-black/[0.02] transition-all group">
-                                    <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                        {feature.icon}
+                                <div key={index} className="bg-white p-6 sm:p-8 rounded-3xl border border-black/[0.03] shadow-sm hover:shadow-xl hover:shadow-black/[0.02] transition-all group flex flex-col justify-between">
+                                    <div>
+                                        <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shrink-0">
+                                            {feature.icon}
+                                        </div>
+                                        <h3 className="text-lg sm:text-xl font-bold text-black mb-2 sm:mb-3">{feature.title}</h3>
+                                        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
+                                            {feature.description}
+                                        </p>
                                     </div>
-                                    <h3 className="text-xl font-bold text-black mb-3">{feature.title}</h3>
-                                    <p className="text-slate-500 text-sm leading-relaxed">
-                                        {feature.description}
-                                    </p>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </section>
 
-
-
                 {/* Why This Portal? Section */}
-                <section className="px-6 py-24 md:px-16 max-w-7xl mx-auto">
-                    <div className="text-center space-y-4 mb-20">
-                        <h2 className="text-4xl md:text-5xl font-bold text-black tracking-tight">Why This Portal?</h2>
-                        <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                <section className="px-6 py-14 sm:py-24 md:px-16 max-w-7xl mx-auto">
+                    <div className="text-center space-y-3 mb-10 sm:mb-20">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black tracking-tight">Why This Portal?</h2>
+                        <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
                             Ensuring accountability by allowing users, staff, and administrators to manage, track, and resolve complaints efficiently.
                         </p>
                     </div>
@@ -180,38 +180,39 @@ function Home() {
                             { value: '24h', label: 'Avg. Resolution' },
                             { value: stats.totalStaff.toString(), label: 'Total Staff' }
                         ].map((stat, index) => (
-                            <div key={index} className="bg-white p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] border border-black/[0.03] shadow-[0_4px_25px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center text-center space-y-2 hover:shadow-[0_8px_40px_rgba(0,0,0,0.04)] transition-all">
-                                <span className="text-4xl sm:text-6xl font-bold text-black tracking-tighter">{stat.value}</span>
+                            <div key={index} className="bg-white p-5 sm:p-10 rounded-[1.5rem] sm:rounded-[2.5rem] border border-black/[0.03] shadow-[0_4px_25px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center text-center space-y-1 sm:space-y-2 hover:shadow-[0_8px_40px_rgba(0,0,0,0.04)] transition-all">
+                                <span className="text-3xl sm:text-6xl font-bold text-black tracking-tighter">{stat.value}</span>
                                 <span className="text-slate-400 font-medium text-xs sm:text-sm border-t border-slate-50 pt-2 w-full">{stat.label}</span>
                             </div>
                         ))}
                     </div>
                 </section>
+
                 {/* CTA Section */}
-                <section className="px-6 py-24 md:px-16 max-w-7xl mx-auto">
-                    <div className="bg-black rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[4rem] p-8 sm:p-12 md:p-24 text-center relative overflow-hidden group">
+                <section className="px-4 sm:px-6 py-14 sm:py-24 max-w-7xl mx-auto">
+                    <div className="bg-black rounded-[2rem] sm:rounded-[2.5rem] md:rounded-[4rem] p-6 sm:p-12 md:p-24 text-center relative overflow-hidden group">
                         {/* Background subtle glow */}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none"></div>
 
-                        <div className="relative z-10 space-y-8">
-                            <div className="space-y-4">
-                                <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight">
+                        <div className="relative z-10 space-y-6 sm:space-y-8">
+                            <div className="space-y-3 sm:space-y-4">
+                                <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold text-white tracking-tight">
                                     Have an Issue? Let Us Know.
                                 </h2>
-                                <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                                <p className="text-slate-400 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
                                     Don't let grievances go unheard. Resolve them today.
                                 </p>
                             </div>
 
-                            <div className="flex flex-wrap items-center justify-center gap-6 pt-4">
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-6 pt-2 sm:pt-4">
                                 <Link
                                     to={isLogged ? (user?.role === 'User' ? "/complaints/new" : "/complaints") : "/login"}
-                                    className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5"
+                                    className="bg-white text-black px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5 text-center"
                                 >
                                     {isLogged ? (user?.role === 'User' ? "Raise a Complaint" : "View Dashboard") : "Raise a Complaint"}
                                 </Link>
                                 {!isLogged && (
-                                    <Link to="/register" className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5">
+                                    <Link to="/register" className="bg-white/10 text-white border border-white/20 sm:bg-white sm:text-black sm:border-none px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/20 sm:hover:bg-slate-100 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5 text-center">
                                         Register Now
                                     </Link>
                                 )}
